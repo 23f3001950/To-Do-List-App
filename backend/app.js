@@ -11,14 +11,19 @@ const app = express();
 
 // Middleware
 app.use(cors({
-origin: [
-  'http://localhost:3000',
-  'https://todoapp-seven-lilac.vercel.app',
-  process.env.FRONTEND_URL
-],  credentials: true
+  origin: function(origin, callback) {
+    if(!origin) return callback(null, true);
+    if(
+      origin.includes('vercel.app') ||
+      origin.includes('localhost')
+    ) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true
 }));
 app.use(express.json());
-
 // Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/tasks', protect, taskRoutes);
