@@ -18,7 +18,7 @@ export default function TaskCard({ task, onEdit }) {
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {
-    if (!window.confirm('Delete this task?')) return;
+
     setDeleting(true);
     try {
       await removeTask(task._id);
